@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    //SQLDelight
     implementation(Dependencies.SqlDelight.androidDriver)
     implementation(Dependencies.AndroidX.core)
 
