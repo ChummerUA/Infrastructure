@@ -31,7 +31,9 @@ android {
 
 dependencies {
     implementation(Dependencies.SqlDelight.androidDriver)
+    implementation(Dependencies.SqlDelight.coroutineExtensions)
     implementation(Dependencies.AndroidX.core)
+    implementation(Dependencies.coroutines)
 
     implementation(project(":infrastructure:usecase"))
 }
