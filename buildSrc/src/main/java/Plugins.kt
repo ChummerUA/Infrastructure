@@ -12,5 +12,9 @@ object Plugins {
         const val jvm = "org.jetbrains.kotlin.jvm"
     }
 
+    object Maven {
+        const val publish = "maven-publish"
+    }
+
     const val sqlDelight = "com.squareup.sqldelight"
 }

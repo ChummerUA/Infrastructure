@@ -10,8 +10,17 @@ object ConfigData {
     val javaVersion = JavaVersion.VERSION_1_8
     const val jvmTarget = "1.8"
 
-    const val versionCode = 1
-    const val versionName = "1.0"
-
     const val namespaceRoot = "com.chummer.infrastructure"
+
+    const val libraryId = "infrastructure"
+    const val versionName = "1.0.0"
+
+    object Components {
+        const val release = "release"
+    }
+}
+
+object BuildType {
+    const val release = "release"
+    const val debug = "debug"
 }

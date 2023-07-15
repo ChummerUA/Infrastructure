@@ -1,4 +1,5 @@
 plugins {
+    id(Plugins.Maven.publish)
     id(Plugins.Android.library)
     id(Plugins.JetBrains.android)
 }
@@ -25,6 +26,31 @@ android {
     }
     kotlinOptions {
         jvmTarget = ConfigData.jvmTarget
+    }
+    publishing {
+        multipleVariants("custom") {
+            includeBuildTypeValues(
+                BuildType.debug,
+                BuildType.release
+            )
+            withJavadocJar()
+        }
+    }
+}
+
+afterEvaluate {
+    android.libraryVariants.forEach { variant ->
+        publishing.publications {
+            create<MavenPublication>(variant.name) {
+                pom {
+                    groupId = ConfigData.namespaceRoot
+                    artifactId = "network"
+                    version = ConfigData.versionName
+                }
+
+                from(components[ConfigData.Components.release])
+            }
+        }
     }
 }
 
