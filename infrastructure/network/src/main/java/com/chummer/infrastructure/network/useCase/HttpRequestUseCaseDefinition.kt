@@ -1,6 +1,5 @@
 package com.chummer.infrastructure.network.useCase
 
-import com.chummer.infrastructure.network.MapToDomain
 import com.chummer.infrastructure.network.MapToError
 import com.chummer.infrastructure.network.MapToResult
 import io.ktor.client.HttpClient
@@ -10,32 +9,34 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpMethod
 import io.ktor.http.isSuccess
 
-interface HttpRequestUseCaseDefinition<Domain, NetworkResult, NetworkError : Throwable> : MapToResult<NetworkResult>,
-    MapToDomain<Domain, NetworkResult>, MapToError<NetworkError> {
-
-    val HttpRequestUseCaseDefinition<Domain, NetworkResult, NetworkError>.baseUrl: String
-    val HttpRequestUseCaseDefinition<Domain, NetworkResult, NetworkError>.subpath: String
-    val HttpRequestUseCaseDefinition<Domain, NetworkResult, NetworkError>.method: HttpMethod
-
-    fun HttpRequestUseCaseDefinition<Domain, NetworkResult, NetworkError>.getFullPath(): String {
-        return baseUrl + subpath
-    }
+interface HttpRequestUseCaseDefinition<NetworkResult, NetworkError : Throwable> : MapToResult<NetworkResult>,
+    MapToError<NetworkError> {
+    val HttpRequestUseCaseDefinition<NetworkResult, NetworkError>.definition: HttpRequestDefinition
 
     suspend fun HttpClient.executeRequest(
         configureRequest: (HttpRequestBuilder.() -> Unit)
-    ): Domain {
-        val response = request(getFullPath()) {
-            method = this@HttpRequestUseCaseDefinition.method
+    ): NetworkResult {
+        val response = request(definition.fullPath) {
+            method = this@HttpRequestUseCaseDefinition.definition.method
             configureRequest()
         }
 
-        return parseResponse(response).toDomain()
+        return parseResponse(response)
     }
 
-    fun HttpRequestUseCaseDefinition<Domain, NetworkResult, NetworkError>.parseResponse(response: HttpResponse): NetworkResult {
+    fun HttpRequestUseCaseDefinition<NetworkResult, NetworkError>.parseResponse(response: HttpResponse): NetworkResult {
         return if (!response.status.isSuccess())
             throw response.toError()
         else
             response.toResult()
     }
+}
+
+data class HttpRequestDefinition(
+    val baseUrl: String,
+    val subPath: String,
+    val method: HttpMethod
+) {
+    val fullPath
+        get() = baseUrl + subPath
 }

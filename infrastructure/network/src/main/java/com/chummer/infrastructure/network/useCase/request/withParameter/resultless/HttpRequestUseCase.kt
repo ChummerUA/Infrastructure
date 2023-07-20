@@ -15,7 +15,7 @@ import kotlin.coroutines.CoroutineContext
 abstract class HttpRequestUseCase<RequestParameter, NetworkError : Throwable>(
     id: String,
     private val client: HttpClient
-) : SuspendUseCase(id), HttpRequestUseCaseDefinition<Boolean, Boolean, NetworkError>,
+) : SuspendUseCase(id), HttpRequestUseCaseDefinition<Boolean, NetworkError>,
     ConfigureRequest<RequestParameter> {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
@@ -37,8 +37,6 @@ abstract class HttpRequestUseCase<RequestParameter, NetworkError : Throwable>(
             _isExecuting.value = false
         }
     }
-
-    override fun Boolean.toDomain(): Boolean = this
 
     override fun HttpResponse.toResult(): Boolean {
         return status.isSuccess()

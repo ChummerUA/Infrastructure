@@ -10,17 +10,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-abstract class HttpRequestUseCase<Domain, NetworkResult, NetworkError : Throwable>(
+abstract class HttpRequestUseCase<NetworkResult, NetworkError : Throwable>(
     id: String,
     private val client: HttpClient
-) : SuspendUseCase(id), HttpRequestUseCaseDefinition<Domain, NetworkResult, NetworkError>,
+) : SuspendUseCase(id), HttpRequestUseCaseDefinition<NetworkResult, NetworkError>,
     ConfigureRequest {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     private val _isExecuting = MutableStateFlow(false)
     val isExecuting: Flow<Boolean> = _isExecuting
 
-    suspend fun execute(): Domain {
+    suspend fun execute(): NetworkResult {
         _isExecuting.value = true
 
         return try {
