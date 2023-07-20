@@ -57,8 +57,8 @@ afterEvaluate {
 
 dependencies {
     //DataStore
-    implementation(Dependencies.dataStore)
-    implementation(Dependencies.AndroidX.core)
+    api(Dependencies.dataStore)
+    api(Dependencies.AndroidX.core)
 
-    implementation(project(":infrastructure:usecase"))
+    api(project(":infrastructure:usecase"))
 }

@@ -17,6 +17,7 @@ object ConfigData {
 
     object Components {
         const val release = "release"
+        const val java = "java"
     }
 }
 

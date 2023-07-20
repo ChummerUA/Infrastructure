@@ -55,9 +55,9 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation(Dependencies.Ktor.core)
-    implementation(Dependencies.Ktor.okhttp)
-    implementation(Dependencies.coroutines)
+    api(Dependencies.Ktor.core)
+    api(Dependencies.Ktor.okhttp)
+    api(Dependencies.coroutines)
 
-    implementation(project(":infrastructure:usecase"))
+    api(project(":infrastructure:usecase"))
 }

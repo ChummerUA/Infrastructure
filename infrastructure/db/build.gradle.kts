@@ -57,10 +57,10 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation(Dependencies.SqlDelight.androidDriver)
-    implementation(Dependencies.SqlDelight.coroutineExtensions)
-    implementation(Dependencies.AndroidX.core)
-    implementation(Dependencies.coroutines)
+    api(Dependencies.SqlDelight.androidDriver)
+    api(Dependencies.SqlDelight.coroutineExtensions)
+    api(Dependencies.AndroidX.core)
+    api(Dependencies.coroutines)
 
-    implementation(project(":infrastructure:usecase"))
+    api(project(":infrastructure:usecase"))
 }
