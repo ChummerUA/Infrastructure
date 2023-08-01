@@ -1,15 +1,23 @@
 package com.chummer.infrastructure.network
 
+import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 
-interface MapToResult<Result> {
-    fun HttpResponse.toResult(): Result
+sealed class ResultMapper<Result> {
+    suspend fun mapToResult(httpResponse: HttpResponse) = httpResponse.toResult()
+
+    abstract suspend fun HttpResponse.toResult(): Result
+
+    @Suppress("UNCHECKED_CAST")
+    class JsonResultMapper<Result>: ResultMapper<Result>() {
+        override suspend fun HttpResponse.toResult(): Result {
+            return body<Any>() as Result
+        }
+    }
 }
 
-interface MapToError<NetworkError: Throwable> {
-    fun HttpResponse.toError(): NetworkError
-}
+abstract class ErrorMapper<NetworkError: Throwable> {
+    abstract suspend fun HttpResponse.toError(): NetworkError
 
-interface MapToDomain<Domain, NetworkResult> {
-    fun NetworkResult.toDomain(): Domain
+    suspend fun mapToError(httpResponse: HttpResponse) = httpResponse.toError()
 }

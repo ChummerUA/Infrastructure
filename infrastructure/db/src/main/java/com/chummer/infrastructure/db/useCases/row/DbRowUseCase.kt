@@ -5,6 +5,7 @@ import com.chummer.infrastructure.db.MapToDomain
 import com.chummer.infrastructure.db.query.Query
 import com.squareup.sqldelight.Transacter
 import kotlinx.coroutines.withContext
+import com.squareup.sqldelight.Query as SqlQuery
 
 abstract class DbRowUseCase<QueryArgument, Domain, Row : Any, QueryTransacter : Transacter>(
     id: String,
@@ -14,13 +15,9 @@ abstract class DbRowUseCase<QueryArgument, Domain, Row : Any, QueryTransacter : 
 
     suspend fun execute(argument: QueryArgument): Domain {
         return withContext(coroutineContext) {
-            transacter.getQuery(argument).executeAsOne().toDomain()
+            transacter.getQuery(argument).executeQuery()
         }
     }
 
-    suspend fun executeNullable(argument: QueryArgument): Domain? {
-        return withContext(coroutineContext) {
-            transacter.getQuery(argument).executeAsOneOrNull()?.toDomain()
-        }
-    }
+    protected abstract fun SqlQuery<Row>.executeQuery(): Domain
 }

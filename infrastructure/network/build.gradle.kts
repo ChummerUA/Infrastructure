@@ -57,7 +57,8 @@ afterEvaluate {
 dependencies {
     api(Dependencies.Ktor.core)
     api(Dependencies.Ktor.okhttp)
-    api(Dependencies.coroutines)
+    api(Dependencies.KotilnX.coroutines)
+    api(Dependencies.KotilnX.serialization)
 
     api(project(":infrastructure:usecase"))
 }

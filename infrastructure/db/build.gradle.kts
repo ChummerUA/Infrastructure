@@ -60,7 +60,7 @@ dependencies {
     api(Dependencies.SqlDelight.androidDriver)
     api(Dependencies.SqlDelight.coroutineExtensions)
     api(Dependencies.AndroidX.core)
-    api(Dependencies.coroutines)
+    api(Dependencies.KotilnX.coroutines)
 
     api(project(":infrastructure:usecase"))
 }
