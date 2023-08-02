@@ -16,5 +16,5 @@ object Plugins {
         const val publish = "maven-publish"
     }
 
-    const val sqlDelight = "com.squareup.sqldelight"
+    const val sqlDelight = "app.cash.sqldelight"
 }

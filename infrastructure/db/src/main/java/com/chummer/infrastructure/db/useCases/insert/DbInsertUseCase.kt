@@ -2,7 +2,7 @@ package com.chummer.infrastructure.db.useCases.insert
 
 import com.chummer.infrastructure.db.useCases.DbUseCase
 import com.chummer.infrastructure.db.MapToDbRow
-import com.squareup.sqldelight.Transacter
+import app.cash.sqldelight.Transacter
 import kotlinx.coroutines.withContext
 
 abstract class DbInsertUseCase<Domain, Row : Any, QueryTransacter : Transacter>(

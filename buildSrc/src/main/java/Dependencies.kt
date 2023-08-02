@@ -12,7 +12,7 @@ object Dependencies {
     }
 
     object SqlDelight {
-        private const val root = "com.squareup.sqldelight"
+        private const val root = "app.cash.sqldelight"
 
         const val androidDriver = "$root:android-driver:${Versions.sqlDelight}"
         const val coroutineExtensions = "$root:coroutines-extensions-jvm:${Versions.sqlDelight}"
@@ -22,8 +22,10 @@ object Dependencies {
     object KotilnX {
         private const val root = "org.jetbrains.kotlinx"
 
-        const val coroutines = "$root:kotlinx-coroutines-android:${Versions.KotlinX.coroutines_version}"
-        const val serialization = "$root:kotlinx-serialization-json:${Versions.KotlinX.jsonSerialization}"
+        const val coroutines =
+            "$root:kotlinx-coroutines-android:${Versions.KotlinX.coroutines_version}"
+        const val serialization =
+            "$root:kotlinx-serialization-json:${Versions.KotlinX.jsonSerialization}"
     }
 
     const val dataStore = "androidx.datastore:datastore-preferences:${Versions.dataStore}"

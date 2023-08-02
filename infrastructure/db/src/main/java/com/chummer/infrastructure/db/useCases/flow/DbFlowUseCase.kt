@@ -3,12 +3,12 @@ package com.chummer.infrastructure.db.useCases.flow
 import com.chummer.infrastructure.db.useCases.DbUseCase
 import com.chummer.infrastructure.db.MapToDomain
 import com.chummer.infrastructure.db.query.Query
-import com.squareup.sqldelight.Transacter
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
+import app.cash.sqldelight.Transacter
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToOne
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import com.squareup.sqldelight.Query as SqlQuery
+import app.cash.sqldelight.Query as SqlQuery
 
 abstract class DbFlowUseCase<QueryArgument, Domain : Any, Row : Any, QueryTransacter : Transacter>(
     id: String,
@@ -21,7 +21,7 @@ abstract class DbFlowUseCase<QueryArgument, Domain : Any, Row : Any, QueryTransa
     }
 
     private fun SqlQuery<Row>.toFlow(): Flow<Row> {
-        return this.asFlow().mapToOne()
+        return this.asFlow().mapToOne(coroutineContext)
     }
 
     private fun Flow<Row>.mapToDomain() = map { it.toDomain() }

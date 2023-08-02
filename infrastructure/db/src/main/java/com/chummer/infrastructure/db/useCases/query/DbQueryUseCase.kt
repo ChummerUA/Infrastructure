@@ -3,9 +3,9 @@ package com.chummer.infrastructure.db.useCases.query
 import com.chummer.infrastructure.db.MapToDomain
 import com.chummer.infrastructure.db.query.Query
 import com.chummer.infrastructure.db.useCases.DbUseCase
-import com.squareup.sqldelight.Transacter
+import app.cash.sqldelight.Transacter
 import kotlinx.coroutines.withContext
-import com.squareup.sqldelight.Query as SqlQuery
+import app.cash.sqldelight.Query as SqlQuery
 
 abstract class DbQueryUseCase<QueryArgument, Domain, Row : Any, QueryTransacter : Transacter>(
     id: String,
