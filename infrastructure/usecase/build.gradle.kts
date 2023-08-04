@@ -29,3 +29,7 @@ publishing {
         }
     }
 }
+
+dependencies {
+    api(Dependencies.KotilnX.coroutines)
+}

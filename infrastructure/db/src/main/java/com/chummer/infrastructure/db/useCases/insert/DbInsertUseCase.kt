@@ -1,18 +1,16 @@
 package com.chummer.infrastructure.db.useCases.insert
 
-import com.chummer.infrastructure.db.useCases.DbUseCase
-import com.chummer.infrastructure.db.MapToDbRow
 import app.cash.sqldelight.Transacter
+import com.chummer.infrastructure.db.useCases.DbExecutableUseCase
 import kotlinx.coroutines.withContext
 
-abstract class DbInsertUseCase<Domain, Row : Any, QueryTransacter : Transacter>(
+abstract class DbInsertUseCase<Row : Any, QueryTransacter : Transacter>(
     id: String,
     transacter: QueryTransacter
-) : DbUseCase<QueryTransacter>(id, transacter), MapToDbRow<Domain, Row> {
-
-    suspend fun insert(item: Domain) {
+) : DbExecutableUseCase<Row, Unit, QueryTransacter>(id, transacter) {
+    override suspend fun execute(input: Row) {
         withContext(coroutineContext) {
-            transacter.insert(item.toRow())
+            transacter.insert(input)
         }
     }
 

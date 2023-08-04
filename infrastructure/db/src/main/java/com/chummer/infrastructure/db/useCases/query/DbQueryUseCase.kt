@@ -1,23 +1,22 @@
 package com.chummer.infrastructure.db.useCases.query
 
-import com.chummer.infrastructure.db.MapToDomain
-import com.chummer.infrastructure.db.query.Query
-import com.chummer.infrastructure.db.useCases.DbUseCase
 import app.cash.sqldelight.Transacter
+import com.chummer.infrastructure.db.query.HasQuery
+import com.chummer.infrastructure.db.useCases.DbExecutableUseCase
 import kotlinx.coroutines.withContext
 import app.cash.sqldelight.Query as SqlQuery
 
-abstract class DbQueryUseCase<QueryArgument, Domain, Row : Any, QueryTransacter : Transacter>(
+abstract class DbQueryUseCase<QueryArgument, Row : Any, QueryTransacter : Transacter>(
     id: String,
     transacter: QueryTransacter
-) : DbUseCase<QueryTransacter>(id, transacter), Query<QueryArgument, Row, QueryTransacter>,
-    MapToDomain<Row, Domain> {
+) : DbExecutableUseCase<QueryArgument, Row, QueryTransacter>(id, transacter),
+    HasQuery<QueryArgument, Row, QueryTransacter> {
 
-    suspend fun execute(argument: QueryArgument): Domain {
+    override suspend fun execute(input: QueryArgument): Row {
         return withContext(coroutineContext) {
-            transacter.getQuery(argument).executeQuery()
+            transacter.getQuery(input).execute()
         }
     }
 
-    protected abstract fun SqlQuery<Row>.executeQuery(): Domain
+    protected abstract fun SqlQuery<Row>.execute(): Row
 }

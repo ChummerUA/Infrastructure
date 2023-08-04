@@ -1,6 +1,6 @@
 package com.chummer.infrastructure.network
 
-import com.chummer.infrastructure.usecase.SuspendUseCase
+import com.chummer.infrastructure.usecase.ExecutableUseCase
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
@@ -17,7 +17,7 @@ import kotlin.coroutines.CoroutineContext
 abstract class HttpUseCase<RequestParameter, NetworkResult, NetworkError : Throwable>(
     id: String,
     private val client: HttpClient
-) : SuspendUseCase(id) {
+) : ExecutableUseCase<RequestParameter, NetworkResult>(id) {
     protected abstract val definition: RequestDefinition
     protected abstract val errorMapper: ErrorMapper<NetworkError>
     protected abstract val responseMapper: ResultMapper<NetworkResult>
@@ -27,7 +27,7 @@ abstract class HttpUseCase<RequestParameter, NetworkResult, NetworkError : Throw
     private val _isExecuting = MutableStateFlow(false)
     val isExecuting: Flow<Boolean> = _isExecuting
 
-    suspend fun execute(parameter: RequestParameter): NetworkResult {
+    override suspend fun execute(parameter: RequestParameter): NetworkResult {
         _isExecuting.value = true
 
         return try {
