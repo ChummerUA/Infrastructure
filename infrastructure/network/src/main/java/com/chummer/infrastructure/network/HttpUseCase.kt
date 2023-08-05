@@ -27,12 +27,12 @@ abstract class HttpUseCase<RequestParameter, NetworkResult, NetworkError : Throw
     private val _isExecuting = MutableStateFlow(false)
     val isExecuting: Flow<Boolean> = _isExecuting
 
-    override suspend fun execute(parameter: RequestParameter): NetworkResult {
+    override suspend fun invoke(input: RequestParameter): NetworkResult {
         _isExecuting.value = true
 
         return try {
             withContext(coroutineContext) {
-                client.executeRequest(parameter)
+                client.executeRequest(input)
             }
         } catch (e: Error) {
             throw e

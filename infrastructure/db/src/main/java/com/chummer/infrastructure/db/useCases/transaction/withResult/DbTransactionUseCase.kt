@@ -10,7 +10,7 @@ abstract class DbTransactionUseCase<QueryArgument, Row : Any, QueryTransacter : 
     transacter: QueryTransacter
 ) : DbExecutableUseCase<QueryArgument, Row, QueryTransacter>(id, transacter) {
 
-    override suspend fun execute(input: QueryArgument): Row {
+    override suspend fun invoke(input: QueryArgument): Row {
         return withContext(coroutineContext) {
             transacter.transactionWithResult {
                 execute(input)

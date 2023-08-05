@@ -13,7 +13,7 @@ abstract class DbItemFlowUseCase<QueryArgument, Row : Any, QueryTransacter : Tra
     private val transacter: QueryTransacter
 ) : FlowUseCase<QueryArgument, Row>(id), HasQuery<QueryArgument, Row, QueryTransacter> {
 
-    override fun flow(input: QueryArgument): Flow<Row> {
+    override fun invoke(input: QueryArgument): Flow<Row> {
         return transacter.getQuery(input).toFlow()
     }
 

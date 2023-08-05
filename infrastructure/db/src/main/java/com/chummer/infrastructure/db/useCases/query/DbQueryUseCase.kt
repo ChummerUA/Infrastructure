@@ -12,7 +12,7 @@ abstract class DbQueryUseCase<QueryArgument, Row : Any, QueryTransacter : Transa
 ) : DbExecutableUseCase<QueryArgument, Row, QueryTransacter>(id, transacter),
     HasQuery<QueryArgument, Row, QueryTransacter> {
 
-    override suspend fun execute(input: QueryArgument): Row {
+    override suspend fun invoke(input: QueryArgument): Row {
         return withContext(coroutineContext) {
             transacter.getQuery(input).execute()
         }

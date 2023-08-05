@@ -12,7 +12,7 @@ abstract class DbListFlowUseCase<QueryArgument, Row : Any, QueryTransacter : Tra
     id: String,
     private val transacter: QueryTransacter
 ) : FlowUseCase<QueryArgument, List<Row>>(id), HasQuery<QueryArgument, Row, QueryTransacter> {
-    override fun flow(input: QueryArgument): Flow<List<Row>> {
+    override fun invoke(input: QueryArgument): Flow<List<Row>> {
         return transacter.getQuery(input).toFlow()
     }
 

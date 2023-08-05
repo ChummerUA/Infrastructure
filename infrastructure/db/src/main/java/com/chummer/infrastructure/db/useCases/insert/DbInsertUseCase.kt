@@ -8,7 +8,7 @@ abstract class DbInsertUseCase<Row : Any, QueryTransacter : Transacter>(
     id: String,
     transacter: QueryTransacter
 ) : DbExecutableUseCase<Row, Unit, QueryTransacter>(id, transacter) {
-    override suspend fun execute(input: Row) {
+    override suspend fun invoke(input: Row) {
         withContext(coroutineContext) {
             transacter.insert(input)
         }
