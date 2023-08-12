@@ -10,7 +10,7 @@ import app.cash.sqldelight.Query as SqlQuery
 
 abstract class DbItemFlowUseCase<QueryArgument, Row : Any, QueryTransacter : Transacter>(
     id: String,
-    private val transacter: QueryTransacter
+    protected val transacter: QueryTransacter
 ) : FlowUseCase<QueryArgument, Row>(id), HasQuery<QueryArgument, Row, QueryTransacter> {
 
     override fun invoke(input: QueryArgument): Flow<Row> {
