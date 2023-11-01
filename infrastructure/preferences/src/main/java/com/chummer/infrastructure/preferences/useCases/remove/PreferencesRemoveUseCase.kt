@@ -1,23 +1,24 @@
 package com.chummer.infrastructure.preferences.useCases.remove
 
 import android.content.Context
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.chummer.infrastructure.preferences.MapToDomain
-import com.chummer.infrastructure.preferences.useCases.HasPreferenceKey
-import com.chummer.infrastructure.preferences.useCases.PreferencesUseCase
-import kotlinx.coroutines.withContext
+import com.chummer.infrastructure.preferences.useCases.ExecutablePreferencesWithKeyAsInputUseCase
 
-abstract class PreferencesRemoveUseCase<Dto, Domain>(
+abstract class PreferencesRemoveUseCase<KeyType>(
     id: String,
     context: Context
-): PreferencesUseCase(id, context), MapToDomain<Dto, Domain>, HasPreferenceKey<Dto> {
-    suspend fun remove(): Domain? {
-        return withContext(coroutineContext) {
-            var result: Domain? = null
-            dataStore.edit {
-                result = it.remove(key).toDomain()
+): ExecutablePreferencesWithKeyAsInputUseCase<KeyType, KeyType?>(id, context) {
+    override suspend fun execute(input: Preferences.Key<KeyType>): KeyType? {
+        var result: KeyType? = null
+        dataStore.edit {
+            try {
+                result = it.remove(key)
             }
-            result
+            catch (e: Throwable) { }
         }
+        return result
     }
+
+    suspend operator fun invoke(): KeyType? = invoke(key)
 }

@@ -1,19 +1,29 @@
 package com.chummer.infrastructure.preferences.useCases.flow
 
 import android.content.Context
-import com.chummer.infrastructure.preferences.MapToDomain
+import androidx.datastore.preferences.core.Preferences
+import com.chummer.infrastructure.preferences.dataStore
 import com.chummer.infrastructure.preferences.useCases.HasPreferenceKey
-import com.chummer.infrastructure.preferences.useCases.PreferencesUseCase
+import com.chummer.infrastructure.usecase.FlowUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.coroutines.CoroutineContext
 
-abstract class PreferencesFlowUseCase<Dto, Domain>(
+abstract class PreferencesFlowUseCase<Output>(
     id: String,
     context: Context
-) : PreferencesUseCase(id, context), MapToDomain<Dto, Domain>, HasPreferenceKey<Dto> {
-    fun flow(defaultValue: Dto): Flow<Domain> {
-        return dataStore.data.map {
-            (it[key] ?: defaultValue).toDomain()
-        }
+) : FlowUseCase<Preferences.Key<Output>, Output>(id), HasPreferenceKey<Output> {
+    override val coroutineContext: CoroutineContext = Dispatchers.IO
+    private val dataStore = context.dataStore
+
+    protected abstract val defaultValue: Output
+
+    override fun invoke(input: Preferences.Key<Output>): Flow<Output> = dataStore.data.map {
+        it[key] ?: defaultValue
+    }
+
+    operator fun invoke(): Flow<Output> {
+        return invoke(key)
     }
 }

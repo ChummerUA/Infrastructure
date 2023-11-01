@@ -14,7 +14,7 @@ abstract class DbTransactionUseCase<QueryArgument, QueryTransacter : Transacter>
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    override suspend fun invoke(input: QueryArgument) {
+    override suspend fun execute(input: QueryArgument) {
         return withContext(coroutineContext) {
             transacter.transaction {
                 execute(input)

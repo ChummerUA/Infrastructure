@@ -2,7 +2,9 @@ package com.chummer.infrastructure.usecase
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 abstract class UseCase(
@@ -14,14 +16,29 @@ abstract class SuspendableUseCase(id: String) : UseCase(id) {
 }
 
 abstract class ExecutableUseCase<Input, Output>(id: String) : SuspendableUseCase(id) {
-    abstract suspend operator fun invoke(input: Input): Output
+    private val _isExecuting = MutableStateFlow(false)
+    val isExecuting: Flow<Boolean> = _isExecuting
+
+    protected abstract suspend fun execute(input: Input): Output
+
+    open suspend operator fun invoke(input: Input): Output = withContext(coroutineContext) {
+        _isExecuting.value = true
+
+        return@withContext try {
+            execute(input)
+        } catch (e: Throwable) {
+            throw e
+        } finally {
+            _isExecuting.value = false
+        }
+    }
 }
 
 abstract class MappableUseCase<Input, Output, MappedOutput>(id: String) : SuspendableUseCase(id) {
     protected abstract val internalUseCase: ExecutableUseCase<Input, Output>
 
     suspend fun execute(input: Input): MappedOutput {
-        return internalUseCase.invoke(input).mapResult()
+        return internalUseCase(input).mapResult()
     }
 
     protected abstract fun Output.mapResult(): MappedOutput
