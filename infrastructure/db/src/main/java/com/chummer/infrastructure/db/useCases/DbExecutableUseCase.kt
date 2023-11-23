@@ -5,7 +5,7 @@ import com.chummer.infrastructure.usecase.ExecutableUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
-abstract class DbExecutableUseCase<Input, Output: Any, QueryTransacter : Transacter>(
+abstract class DbExecutableUseCase<Input, Output: Any?, QueryTransacter : Transacter>(
     id: String,
     protected val transacter: QueryTransacter
 ) : ExecutableUseCase<Input, Output>(id) {
