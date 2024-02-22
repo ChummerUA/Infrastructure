@@ -13,12 +13,17 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
 import kotlin.coroutines.CoroutineContext
 
 abstract class HttpUseCase<RequestParameter, NetworkResult>(
     id: String,
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val serializer: KSerializer<NetworkResult>
 ) : ExecutableUseCase<RequestParameter, NetworkResult>(id) {
+    abstract val json: Json
+
     protected abstract val definition: RequestDefinition
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
@@ -55,7 +60,10 @@ abstract class HttpUseCase<RequestParameter, NetworkResult>(
             response.deserialize()
     }
 
-    protected abstract suspend fun HttpResponse.deserialize(): NetworkResult
+    private suspend fun HttpResponse.deserialize(): NetworkResult {
+        val text = this.bodyAsText()
+        return json.decodeFromString(serializer, text)
+    }
 
     protected open fun HttpResponse.toError(): Throwable {
         return when(status) {
