@@ -14,7 +14,6 @@ object Dependencies {
     object SqlDelight {
         private const val root = "app.cash.sqldelight"
 
-        const val androidDriver = "$root:android-driver:${Versions.sqlDelight}"
         const val coroutineExtensions = "$root:coroutines-extensions-jvm:${Versions.sqlDelight}"
         const val gradle = "$root:gradle-plugin:${Versions.sqlDelight}"
     }
@@ -29,4 +28,18 @@ object Dependencies {
     }
 
     const val dataStore = "androidx.datastore:datastore-preferences:${Versions.dataStore}"
+
+
+    object Compose {
+        private const val root = "androidx.compose"
+
+        const val runtime = "$root.runtime:runtime:${Versions.Compose.version}"
+        const val ui = "$root.ui:ui:${Versions.Compose.version}"
+        const val preview = "$root.ui:ui-tooling:${Versions.Compose.version}"
+    }
+
+    object Lifecycle {
+        const val root = "androidx.lifecycle"
+        const val runtime = "$root:lifecycle-runtime-ktx:${Versions.lifecycle}"
+    }
 }

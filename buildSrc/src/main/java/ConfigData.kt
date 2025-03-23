@@ -1,10 +1,8 @@
 import org.gradle.api.JavaVersion
 
 object ConfigData {
-    const val buildToolsVersion = "30.0.3"
 
     const val compileSdk = 33
-    const val targetSdkVersion = 33
     const val minSdk = 24
 
     val javaVersion = JavaVersion.VERSION_1_8
@@ -12,7 +10,6 @@ object ConfigData {
 
     const val namespaceRoot = "com.chummer.infrastructure"
 
-    const val libraryId = "infrastructure"
     const val versionName = "1.0.0"
 
     object Components {
