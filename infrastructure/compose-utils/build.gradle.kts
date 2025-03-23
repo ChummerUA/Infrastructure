@@ -34,7 +34,6 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.Compose.material)
     implementation(Dependencies.Compose.ui)
     implementation(Dependencies.Compose.preview)
     implementation(Dependencies.Compose.runtime)
