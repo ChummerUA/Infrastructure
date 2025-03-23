@@ -1,65 +1,37 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id(Plugins.Maven.publish)
-    id(Plugins.Android.library)
-    id(Plugins.JetBrains.android)
+    id(Plugins.javaLibrary)
+    id(Plugins.JetBrains.jvm)
     id(Plugins.sqlDelight)
 }
 
-android {
-    namespace = "${ConfigData.namespaceRoot}.db"
-
-    defaultConfig {
-        compileSdk = ConfigData.compileSdk
-        minSdk = ConfigData.minSdk
-
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-    compileOptions {
-        sourceCompatibility = ConfigData.javaVersion
-        targetCompatibility = ConfigData.javaVersion
-    }
-    kotlinOptions {
-        jvmTarget = ConfigData.jvmTarget
-    }
-
-    publishing {
-        multipleVariants("custom") {
-            includeBuildTypeValues(
-                BuildType.debug,
-                BuildType.release
-            )
-            withJavadocJar()
-        }
-    }
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = ConfigData.jvmTarget
 }
 
-afterEvaluate {
-    android.libraryVariants.forEach { variant ->
-        publishing.publications {
-            create<MavenPublication>(variant.name) {
-                pom {
-                    groupId = ConfigData.namespaceRoot
-                    artifactId = "db"
-                    version = ConfigData.versionName
-                }
+java {
+    sourceCompatibility = ConfigData.javaVersion
+    targetCompatibility = ConfigData.javaVersion
+}
 
-                from(components[ConfigData.Components.release])
+publishing {
+    publications {
+        create<MavenPublication>("default") {
+            pom {
+                groupId = ConfigData.namespaceRoot
+                artifactId = "db"
+                version = ConfigData.versionName
             }
+
+            from(components[ConfigData.Components.java])
         }
     }
 }
 
 dependencies {
-    api(Dependencies.SqlDelight.androidDriver)
     api(Dependencies.SqlDelight.coroutineExtensions)
-    api(Dependencies.AndroidX.core)
     api(Dependencies.KotilnX.coroutines)
 
     api(project(":infrastructure:usecase"))
