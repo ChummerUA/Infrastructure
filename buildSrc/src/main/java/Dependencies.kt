@@ -33,6 +33,7 @@ object Dependencies {
     object Compose {
         private const val root = "androidx.compose"
 
+        const val foundation = "$root.foundation:foundation:${Versions.Compose.version}"
         const val runtime = "$root.runtime:runtime:${Versions.Compose.version}"
         const val ui = "$root.ui:ui:${Versions.Compose.version}"
         const val preview = "$root.ui:ui-tooling:${Versions.Compose.version}"

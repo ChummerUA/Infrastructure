@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.library")
@@ -37,5 +36,6 @@ dependencies {
     implementation(Dependencies.Compose.ui)
     implementation(Dependencies.Compose.preview)
     implementation(Dependencies.Compose.runtime)
+    implementation(Dependencies.Compose.foundation)
     implementation(Dependencies.Lifecycle.runtime)
 }

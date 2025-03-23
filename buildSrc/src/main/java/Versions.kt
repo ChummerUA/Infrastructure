@@ -8,7 +8,6 @@ object Versions {
     const val dataStore = "1.0.0"
 
     const val ktor = "2.3.2"
-    const val okHttp = "4.4.0"
 
     const val lifecycle = "2.6.2"
 
