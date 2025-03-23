@@ -48,7 +48,7 @@ abstract class HttpUseCase<RequestParameter, NetworkResult>(
         return parseResponse(response)
     }
 
-    protected open fun HttpRequestBuilder.configureRequest(parameter: RequestParameter) {
+    protected open suspend fun HttpRequestBuilder.configureRequest(parameter: RequestParameter) {
         method = definition.method
         url(definition.subPath)
     }
