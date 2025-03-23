@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.8.10"
+    const val kotlin = "1.9.10"
     const val gradle = "8.0.2"
 
     const val ktx = "1.10.1"
@@ -19,6 +19,6 @@ object Versions {
 
     object Compose {
         const val version = "1.5.2"
-        const val material = "1.1.2"
+        const val compiler = "1.5.3"
     }
 }

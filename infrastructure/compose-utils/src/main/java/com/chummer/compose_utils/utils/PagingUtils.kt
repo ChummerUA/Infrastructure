@@ -15,9 +15,9 @@ val LazyListLayoutInfo.itemsBeforeEnd
     get() = totalItemsCount - (visibleItemsInfo.last().index + 1)
 
 sealed interface PagingDirection {
-    object Forward : PagingDirection
+    data object Forward : PagingDirection
 
-    object Backward : PagingDirection
+    data object Backward : PagingDirection
 }
 
 @Composable
