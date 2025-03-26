@@ -10,6 +10,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.request
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.headers
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,9 +23,10 @@ abstract class HttpUseCase<RequestParameter, NetworkResult>(
     private val client: HttpClient,
     private val serializer: KSerializer<NetworkResult>
 ) : ExecutableUseCase<RequestParameter, NetworkResult>(id) {
-    abstract val json: Json
+    private val json: Json = Json
 
-    protected abstract val definition: RequestDefinition
+    abstract val method: HttpMethod
+    abstract val subPath: String
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
@@ -49,9 +51,21 @@ abstract class HttpUseCase<RequestParameter, NetworkResult>(
     }
 
     protected open suspend fun HttpRequestBuilder.configureRequest(parameter: RequestParameter) {
-        method = definition.method
-        url(definition.subPath)
+        method = this@HttpUseCase.method
+        url(this@HttpUseCase.subPath)
+
+        headers {
+            configureHeaders()
+        }
+        configureAuth()
+        configureBody(parameter)
     }
+
+    open fun HttpRequestBuilder.configureHeaders() { }
+
+    open fun HttpRequestBuilder.configureBody(parameter: RequestParameter) { }
+
+    open suspend fun HttpRequestBuilder.configureAuth() { }
 
     private suspend fun parseResponse(response: HttpResponse): NetworkResult {
         return if (!response.status.isSuccess())
