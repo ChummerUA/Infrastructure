@@ -31,9 +31,7 @@ abstract class HttpUseCase<RequestParameter, NetworkResult>(
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     override suspend fun execute(input: RequestParameter): NetworkResult {
-        return withContext(coroutineContext) {
-            client.executeRequest(input)
-        }
+        return client.executeRequest(input)
     }
 
     private suspend fun HttpClient.executeRequest(parameter: RequestParameter): NetworkResult {
