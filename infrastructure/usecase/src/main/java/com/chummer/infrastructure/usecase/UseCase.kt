@@ -45,7 +45,7 @@ abstract class MappableUseCase<Input, Output, MappedOutput>(id: String) : Suspen
 }
 
 abstract class FlowUseCase<Input, Output>(id: String) : SuspendableUseCase(id) {
-    abstract operator fun invoke(input: Input): Flow<Output>
+    abstract operator fun invoke(input: Input): Flow<Output?>
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -53,8 +53,8 @@ abstract class MappableFlowUseCase<Input, Output, MappedOutput>(id: String) :
     SuspendableUseCase(id) {
     protected abstract val internalUseCase: FlowUseCase<Input, Output>
 
-    fun flow(input: Input): Flow<MappedOutput> {
-        return internalUseCase.invoke(input).mapLatest { it.toMappedOutput() }
+    fun flow(input: Input): Flow<MappedOutput?> {
+        return internalUseCase.invoke(input).mapLatest { it?.toMappedOutput() }
     }
 
     protected abstract fun Output.toMappedOutput(): MappedOutput

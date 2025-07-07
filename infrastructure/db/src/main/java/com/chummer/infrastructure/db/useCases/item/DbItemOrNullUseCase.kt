@@ -17,7 +17,12 @@ abstract class DbItemOrNullUseCase<QueryArgument, Row : Any, QueryTransacter : T
 
     override suspend fun execute(input: QueryArgument): Row? {
         return withContext(coroutineContext) {
-            transacter.getQuery(input).executeAsOneOrNull()
+            try {
+                transacter.getQuery(input).executeAsOneOrNull()
+            } catch (e: Throwable) {
+                println(e)
+                throw e
+            }
         }
     }
 }
