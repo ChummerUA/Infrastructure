@@ -3,8 +3,10 @@ package com.chummer.infrastructure.db.useCases.transaction.withResult
 import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.TransactionWithReturn
 import app.cash.sqldelight.db.QueryResult
+import com.chummer.infrastructure.db.dbMutex
 import com.chummer.infrastructure.db.useCases.DbExecutableUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
@@ -17,9 +19,10 @@ abstract class DbTransactionUseCase<QueryArgument, Row : Any, QueryTransacter : 
 
     override suspend fun execute(input: QueryArgument): Row {
         return withContext(coroutineContext) {
-
-            transacter.transactionWithResult {
-                execute(input).value
+            dbMutex.withLock {
+                transacter.transactionWithResult {
+                    execute(input).value
+                }
             }
         }
     }
