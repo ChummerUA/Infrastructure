@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.chummer.infrastructure.preferences.useCases.ExecutablePreferencesWithKeyAsInputUseCase
+import com.chummer.infrastructure.usecase.UseCaseLogger
 
 abstract class PreferencesRemoveUseCase<KeyType>(
     id: String,
-    context: Context
-): ExecutablePreferencesWithKeyAsInputUseCase<KeyType, KeyType?>(id, context) {
+    context: Context,
+    logger: UseCaseLogger,
+): ExecutablePreferencesWithKeyAsInputUseCase<KeyType, KeyType?>(id, context, logger) {
     override suspend fun execute(input: Preferences.Key<KeyType>): KeyType? {
         var result: KeyType? = null
         dataStore.edit {

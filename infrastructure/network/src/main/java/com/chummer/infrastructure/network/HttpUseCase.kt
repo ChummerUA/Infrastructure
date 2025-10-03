@@ -1,6 +1,7 @@
 package com.chummer.infrastructure.network
 
 import com.chummer.infrastructure.usecase.ExecutableUseCase
+import com.chummer.infrastructure.usecase.UseCaseLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
@@ -13,7 +14,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headers
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.CoroutineContext
@@ -21,8 +21,9 @@ import kotlin.coroutines.CoroutineContext
 abstract class HttpUseCase<RequestParameter, NetworkResult>(
     id: String,
     private val client: HttpClient,
-    private val serializer: KSerializer<NetworkResult>
-) : ExecutableUseCase<RequestParameter, NetworkResult>(id) {
+    private val serializer: KSerializer<NetworkResult>,
+    logger: UseCaseLogger
+) : ExecutableUseCase<RequestParameter, NetworkResult>(id, logger) {
     private val json: Json = Json
 
     abstract val method: HttpMethod

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
+import java.time.Instant
 import kotlin.coroutines.CoroutineContext
 
 abstract class UseCase(
@@ -15,7 +16,10 @@ abstract class SuspendableUseCase(id: String) : UseCase(id) {
     abstract val coroutineContext: CoroutineContext
 }
 
-abstract class ExecutableUseCase<Input, Output>(id: String) : SuspendableUseCase(id) {
+abstract class ExecutableUseCase<Input, Output>(
+    id: String,
+    protected open val useCaseLogger: UseCaseLogger
+) : SuspendableUseCase(id) {
     private val _isExecuting = MutableStateFlow(false)
     val isExecuting: Flow<Boolean> = _isExecuting
 
@@ -23,10 +27,17 @@ abstract class ExecutableUseCase<Input, Output>(id: String) : SuspendableUseCase
 
     open suspend operator fun invoke(input: Input): Output = withContext(coroutineContext) {
         _isExecuting.value = true
+        val executionId = synchronized(id) {
+           Instant.now().toEpochMilli()
+        }
+        useCaseLogger.onExecutionStarted(executionId, input)
 
         return@withContext try {
-            execute(input)
+            execute(input).also {
+                useCaseLogger.onExecuted(executionId, it)
+            }
         } catch (e: Throwable) {
+            useCaseLogger.onExecutionFailed(executionId, e)
             throw e
         } finally {
             _isExecuting.value = false
@@ -58,4 +69,12 @@ abstract class MappableFlowUseCase<Input, Output, MappedOutput>(id: String) :
     }
 
     protected abstract fun Output.toMappedOutput(): MappedOutput
+}
+
+interface UseCaseLogger {
+    fun <Input> onExecutionStarted(executionId: Long, input: Input)
+
+    fun onExecutionFailed(executionId: Long, e: Throwable)
+
+    fun <Output> onExecuted(executionId: Long, output: Output)
 }

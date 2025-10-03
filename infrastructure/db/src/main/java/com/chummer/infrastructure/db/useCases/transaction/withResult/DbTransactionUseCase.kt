@@ -5,6 +5,7 @@ import app.cash.sqldelight.TransactionWithReturn
 import app.cash.sqldelight.db.QueryResult
 import com.chummer.infrastructure.db.dbMutex
 import com.chummer.infrastructure.db.useCases.DbExecutableUseCase
+import com.chummer.infrastructure.usecase.UseCaseLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -12,8 +13,9 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class DbTransactionUseCase<QueryArgument, Row : Any, QueryTransacter : Transacter>(
     id: String,
-    transacter: QueryTransacter
-) : DbExecutableUseCase<QueryArgument, Row, QueryTransacter>(id, transacter) {
+    transacter: QueryTransacter,
+    logger: UseCaseLogger
+) : DbExecutableUseCase<QueryArgument, Row, QueryTransacter>(id, transacter, logger) {
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
