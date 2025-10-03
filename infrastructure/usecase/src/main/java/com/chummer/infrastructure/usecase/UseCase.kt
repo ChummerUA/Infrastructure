@@ -30,14 +30,14 @@ abstract class ExecutableUseCase<Input, Output>(
         val executionId = synchronized(id) {
            Instant.now().toEpochMilli()
         }
-        useCaseLogger.onExecutionStarted(executionId, input)
+        useCaseLogger.onExecutionStarted(id, executionId, input)
 
         return@withContext try {
             execute(input).also {
-                useCaseLogger.onExecuted(executionId, it)
+                useCaseLogger.onExecuted(id, executionId, it)
             }
         } catch (e: Throwable) {
-            useCaseLogger.onExecutionFailed(executionId, e)
+            useCaseLogger.onExecutionFailed(id, executionId, e)
             throw e
         } finally {
             _isExecuting.value = false
@@ -72,9 +72,9 @@ abstract class MappableFlowUseCase<Input, Output, MappedOutput>(id: String) :
 }
 
 interface UseCaseLogger {
-    fun <Input> onExecutionStarted(executionId: Long, input: Input)
+    fun <Input> onExecutionStarted(useCaseId: String, executionId: Long, input: Input)
 
-    fun onExecutionFailed(executionId: Long, e: Throwable)
+    fun onExecutionFailed(useCaseId: String, executionId: Long, e: Throwable)
 
-    fun <Output> onExecuted(executionId: Long, output: Output)
+    fun <Output> onExecuted(useCaseId: String, executionId: Long, output: Output)
 }
