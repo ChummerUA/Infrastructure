@@ -22,6 +22,7 @@ abstract class ExecutableUseCase<Input, Output>(
 ) : SuspendableUseCase(id) {
     private val _isExecuting = MutableStateFlow(false)
     val isExecuting: Flow<Boolean> = _isExecuting
+    protected open val logAll = true
 
     protected abstract suspend fun execute(input: Input): Output
 
@@ -30,11 +31,11 @@ abstract class ExecutableUseCase<Input, Output>(
         val executionId = synchronized(id) {
            Instant.now().toEpochMilli()
         }
-        useCaseLogger.onExecutionStarted(id, executionId, input)
+        if (logAll) useCaseLogger.onExecutionStarted(id, executionId, input)
 
         return@withContext try {
             execute(input).also {
-                useCaseLogger.onExecuted(id, executionId, it)
+                if (logAll) useCaseLogger.onExecuted(id, executionId, it)
             }
         } catch (e: Throwable) {
             useCaseLogger.onExecutionFailed(id, executionId, e)
