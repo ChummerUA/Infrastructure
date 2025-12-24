@@ -1,5 +1,5 @@
 object Dependencies {
-    const val gradle = "com.android.tools.build:gradle:${Versions.gradle}"
+    const val androidGradle = "com.android.tools.build:gradle:${Versions.androidGradle}"
     const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
 
     object AndroidX {
