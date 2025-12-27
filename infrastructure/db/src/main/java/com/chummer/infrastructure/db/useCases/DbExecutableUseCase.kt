@@ -17,10 +17,8 @@ abstract class DbExecutableUseCase<Input, Output: Any?, QueryTransacter : Transa
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     override suspend fun invoke(input: Input): Output {
-        return withContext(coroutineContext) {
-            dbMutex.withLock {
-                super.invoke(input)
-            }
+        return dbMutex.withLock {
+            super.invoke(input)
         }
     }
 }
