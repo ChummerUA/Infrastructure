@@ -27,9 +27,6 @@ abstract class ExecutableUseCase<Input, Output>(
 
     open suspend operator fun invoke(input: Input): Output = withContext(coroutineContext) {
         _isExecuting.value = true
-        val executionId = synchronized(id) {
-           Instant.now().toEpochMilli()
-        }
 
         return@withContext try {
             execute(input)
