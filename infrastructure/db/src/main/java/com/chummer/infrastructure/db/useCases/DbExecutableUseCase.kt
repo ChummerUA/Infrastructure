@@ -18,7 +18,10 @@ abstract class DbExecutableUseCase<Input, Output: Any?, QueryTransacter : Transa
 
     override suspend fun invoke(input: Input): Output {
         return dbMutex.withLock {
-            super.invoke(input)
+            println("[$id][DB_MUTEX]: Locking db mutex")
+            val output = super.invoke(input)
+            println("[$id][DB_MUTEX]: Unlocking db mutex")
+            return@withLock output
         }
     }
 }
