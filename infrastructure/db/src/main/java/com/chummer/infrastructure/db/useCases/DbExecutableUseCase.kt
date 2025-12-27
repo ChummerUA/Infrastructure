@@ -1,9 +1,11 @@
 package com.chummer.infrastructure.db.useCases
 
 import app.cash.sqldelight.Transacter
+import com.chummer.infrastructure.db.dbMutex
 import com.chummer.infrastructure.usecase.ExecutableUseCase
 import com.chummer.infrastructure.usecase.UseCaseLogger
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
@@ -16,7 +18,9 @@ abstract class DbExecutableUseCase<Input, Output: Any?, QueryTransacter : Transa
 
     override suspend fun invoke(input: Input): Output {
         return withContext(coroutineContext) {
-            super.invoke(input)
+            dbMutex.withLock {
+                super.invoke(input)
+            }
         }
     }
 }
