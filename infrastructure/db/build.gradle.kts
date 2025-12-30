@@ -9,7 +9,7 @@ plugins {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = ConfigData.jvmTarget
+    compilerOptions.jvmTarget.set(JvmTarget.fromTarget(ConfigData.jvmTarget))
 }
 
 java {
