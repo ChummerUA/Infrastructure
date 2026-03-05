@@ -1,7 +1,7 @@
 pluginManagement {
     repositories {
         mavenLocal()
-        google()
+//        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -12,7 +12,7 @@ dependencyResolutionManagement {
         mavenLocal {
             name = "chummer"
         }
-        google()
+//        google()
         mavenCentral()
     }
 }
