@@ -5,8 +5,8 @@ object ConfigData {
     const val compileSdk = 34
     const val minSdk = 24
 
-    val javaVersion = JavaVersion.VERSION_1_8
-    const val jvmTarget = "1.8"
+    val javaVersion = JavaVersion.VERSION_21
+    const val jvmTarget = "21"
 
     const val namespaceRoot = "com.chummer.infrastructure"
 

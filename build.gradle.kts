@@ -18,4 +18,5 @@ plugins {
 //    id(Plugins.Android.library) version Versions.gradle apply false
 //    id(Plugins.JetBrains.android) version Versions.kotlin apply false
     id(Plugins.JetBrains.jvm) version Versions.kotlin apply false
+    id("com.google.devtools.ksp") version "2.3.7" apply false
 }

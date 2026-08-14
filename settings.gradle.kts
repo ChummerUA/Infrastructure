@@ -17,8 +17,11 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Infrastructure"
-include(":infrastructure:db")
-include(":infrastructure:usecase")
+//include(":infrastructure:usecase")
 //include(":infrastructure:preferences")
 //include(":infrastructure:network")
 //include(":infrastructure:compose-utils")
+include("usecase")
+include("db")
+include("annotations")
+include("processor")

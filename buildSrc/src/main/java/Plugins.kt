@@ -1,6 +1,7 @@
 object Plugins {
     const val javaLibrary = "java-library"
     const val kotlin = "kotlin"
+    const val jvm = "jvm"
 
     object Android {
         const val application = "com.android.application"

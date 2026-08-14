@@ -4,8 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id(Plugins.Maven.publish)
     id(Plugins.javaLibrary)
-    id(Plugins.JetBrains.jvm)
     id(Plugins.sqlDelight)
+    id(Plugins.kotlin)
+    kotlin("jvm") version "2.2.20"
 }
 
 tasks.withType<KotlinCompile> {
@@ -31,9 +32,16 @@ publishing {
     }
 }
 
+
+group = "com.chummer.infrastructure"
+
 dependencies {
     api(Dependencies.SqlDelight.coroutineExtensions)
     api(Dependencies.KotilnX.coroutines)
 
-    api(project(":infrastructure:usecase"))
+    api(project(":usecase"))
+}
+
+kotlin {
+    jvmToolchain(21)
 }
