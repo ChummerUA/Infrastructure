@@ -1,9 +1,8 @@
 plugins {
     id(Plugins.Maven.publish)
     id(Plugins.javaLibrary)
-//    id(Plugins.JetBrains.jvm)
     id(Plugins.kotlin)
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version Versions.kotlin
 }
 
 group = "com.chummer.infrastructure"

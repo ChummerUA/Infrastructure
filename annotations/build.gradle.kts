@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id(Plugins.Maven.publish)
     id(Plugins.javaLibrary)
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version Versions.kotlin
 }
 
 tasks.withType<KotlinCompile> {

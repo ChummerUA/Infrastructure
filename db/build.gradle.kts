@@ -6,7 +6,7 @@ plugins {
     id(Plugins.javaLibrary)
     id(Plugins.sqlDelight)
     id(Plugins.kotlin)
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version Versions.kotlin
 }
 
 tasks.withType<KotlinCompile> {
