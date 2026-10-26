@@ -3,12 +3,12 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-kotlin = "2.2.20"
+kotlin = "2.3.20"
 kotlinxDatetime = "0.6.1"
-kotlinxSerializationJSON = "1.7.3"
+kotlinxSerializationJSON = "1.11.0"
 kotlinxCoroutines = "1.11.0"
 jvm-target = "21"
-sqlDelight = "2.4.0"
+sqlDelight = "2.4.1"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref="kotlin" }
