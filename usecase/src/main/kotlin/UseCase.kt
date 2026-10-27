@@ -1,5 +1,6 @@
 package com.chummer.infrastructure.usecase
 
+import com.chummer.infrastructure.annotations.GenerateInvoke
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ abstract class SuspendableUseCase(id: String) : UseCase(id) {
     abstract val coroutineContext: CoroutineContext
 }
 
+@GenerateInvoke
 abstract class ExecutableUseCase<Input, Output>(
     id: String,
     protected open val useCaseLogger: UseCaseLogger
@@ -42,16 +44,7 @@ abstract class ExecutableUseCase<Input, Output>(
     }
 }
 
-abstract class MappableUseCase<Input, Output, MappedOutput>(id: String) : SuspendableUseCase(id) {
-    protected abstract val internalUseCase: ExecutableUseCase<Input, Output>
-
-    suspend fun execute(input: Input): MappedOutput {
-        return internalUseCase(input).mapResult()
-    }
-
-    protected abstract fun Output.mapResult(): MappedOutput
-}
-
+@GenerateInvoke
 abstract class FlowUseCase<Input, Output>(id: String) : SuspendableUseCase(id) {
     abstract operator fun invoke(input: Input): Flow<Output?>
 }

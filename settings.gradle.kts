@@ -27,3 +27,5 @@ rootProject.name = "Infrastructure"
 include("usecase")
 
 include("db")
+include("annotations")
+include("processor")

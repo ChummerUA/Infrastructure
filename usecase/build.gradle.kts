@@ -6,4 +6,5 @@ plugins {
 dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinxCoroutines)
+    implementation(project(":annotations"))
 }
