@@ -43,7 +43,7 @@ class InvokeGenerateProcessor(
 
         val inputDeclaration = inputType.declaration as? KSClassDeclaration
         if (inputDeclaration == null) {
-            logger.warn("Input type in $useCaseName($inputType) is not a concrete class, skipped")
+            logger.warn("Input type in $useCaseName($inputType) cannot be inlined, skipped")
             return
         }
 
