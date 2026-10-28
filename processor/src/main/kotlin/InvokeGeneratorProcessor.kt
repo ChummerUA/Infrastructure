@@ -55,14 +55,34 @@ class InvokeGenerateProcessor(
             isUnit -> emptyList<ParameterSpec>() to CodeBlock.of("Unit")
             isData -> {
                 val params = inputDeclaration?.primaryConstructor?.parameters.orEmpty()
-                if (params.isEmpty() || params.any { it.name == null }) return
-                val specs = params.map {
-                    ParameterSpec.builder(it.name!!.asString(), it.type.toTypeName()).build()
+                if (params.isEmpty() || params.any { it.name == null }) {
+                    logger.warn("Bad parameters", useCaseClass)
+                    return
+                }
+                val inputClass = inputDeclaration!!.toClassName()
+                val lastRequiredIndex = params.indexOfLast { !it.hasDefault }
+                val firstOptionalIndex = params.indexOfFirst { it.hasDefault }
+                val specs = params.mapIndexed { i, p ->
+                    val name = p.name!!.asString()
+                    val builder = ParameterSpec.builder(name, p.type.toTypeName())
+                    if (p.hasDefault) {
+                        if (i > lastRequiredIndex) {
+                            val earlier = params.take(i).joinToString { "${it.name!!.asString()} = ${it.name!!.asString()}" }
+                            builder.defaultValue("%T($earlier).%N", inputClass, name)
+                        }
+                    } else if (firstOptionalIndex != -1 && i > firstOptionalIndex) {
+                        logger.warn(
+                            "Default of '$name' in ${inputDeclaration.simpleName.asString()} is not propagated: " +
+                                    "a required parameter follows it",
+                            useCaseClass
+                        )
+                    }
+                    builder.build()
                 }
                 val argsStatement = params.joinToString {
                     "${it.name!!.asString()} = ${it.name!!.asString()}"
                 }
-                specs to CodeBlock.of("%T($argsStatement)", inputDeclaration?.toClassName())
+                specs to CodeBlock.of("%T($argsStatement)", inputClass)
             }
 
             else -> {
@@ -72,7 +92,6 @@ class InvokeGenerateProcessor(
         }
 
         val isSuspend = Modifier.SUSPEND in executeFunction.modifiers
-        logger.warn("Modifiers ${executeFunction.modifiers.joinToString { it.name }}", useCaseClass)
 
         val useCaseTypeName = useCaseClass.toClassName()
 
@@ -84,6 +103,7 @@ class InvokeGenerateProcessor(
             .returns(outputType.toTypeName())
             .addStatement("return execute(%L)", forwardedArg)
             .build()
+        logger.info("Invoke generated: $spec", useCaseClass)
 
         generateFile(
             useCaseClass = useCaseClass,
