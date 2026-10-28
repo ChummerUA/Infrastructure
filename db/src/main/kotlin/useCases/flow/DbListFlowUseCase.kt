@@ -17,7 +17,7 @@ abstract class DbListFlowUseCase<QueryArgument, Row : Any, QueryTransacter : Tra
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    override fun invoke(input: QueryArgument): Flow<List<Row>> {
+    override fun execute(input: QueryArgument): Flow<List<Row>> {
         return transacter.getQuery(input).toFlow()
     }
 

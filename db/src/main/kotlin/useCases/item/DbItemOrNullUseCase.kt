@@ -17,7 +17,7 @@ abstract class DbItemOrNullUseCase<QueryArgument, Row : Any, QueryTransacter : T
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    override suspend fun execute(input: QueryArgument): Row? {
+    override suspend fun run(input: QueryArgument): Row? {
         return withContext(coroutineContext) {
             try {
                 transacter.getQuery(input).executeAsOneOrNull()

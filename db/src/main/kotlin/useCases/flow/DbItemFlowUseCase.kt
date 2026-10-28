@@ -2,7 +2,6 @@ package com.chummer.infrastructure.db.useCases.flow
 
 import app.cash.sqldelight.Transacter
 import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.chummer.infrastructure.db.query.HasQuery
 import com.chummer.infrastructure.usecase.FlowUseCase
@@ -18,7 +17,7 @@ abstract class DbItemFlowUseCase<QueryArgument, Row : Any, QueryTransacter : Tra
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    override fun invoke(input: QueryArgument): Flow<Row?> {
+    override fun execute(input: QueryArgument): Flow<Row?> {
         return transacter.getQuery(input).toFlow()
     }
 

@@ -1,10 +1,8 @@
 package com.chummer.infrastructure.usecase
 
 import com.chummer.infrastructure.annotations.GenerateInvoke
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import kotlin.coroutines.CoroutineContext
@@ -25,16 +23,16 @@ abstract class ExecutableUseCase<Input, Output>(
     private val _isExecuting = MutableStateFlow(false)
     val isExecuting: Flow<Boolean> = _isExecuting
 
-    protected abstract suspend fun execute(input: Input): Output
+    protected abstract suspend fun run(input: Input): Output
 
-    open suspend operator fun invoke(input: Input): Output = withContext(coroutineContext) {
+    suspend fun execute(input: Input): Output = withContext(coroutineContext) {
         _isExecuting.value = true
         val executionId = synchronized(id) {
             Instant.now().toEpochMilli()
         }
 
         return@withContext try {
-            execute(input)
+            run(input)
         } catch (e: Throwable) {
             useCaseLogger.onExecutionFailed(id, e)
             throw e
@@ -46,7 +44,7 @@ abstract class ExecutableUseCase<Input, Output>(
 
 @GenerateInvoke
 abstract class FlowUseCase<Input, Output>(id: String) : SuspendableUseCase(id) {
-    abstract operator fun invoke(input: Input): Flow<Output?>
+    abstract fun execute(input: Input): Flow<Output?>
 }
 
 interface UseCaseLogger {

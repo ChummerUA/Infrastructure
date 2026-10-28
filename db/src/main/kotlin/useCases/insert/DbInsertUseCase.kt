@@ -16,7 +16,7 @@ abstract class DbInsertUseCase<Row : Any, QueryTransacter : Transacter>(
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    override suspend fun execute(input: Row) {
+    override suspend fun run(input: Row) {
         dbMutex.withLock {
             transacter.insert(input)
         }

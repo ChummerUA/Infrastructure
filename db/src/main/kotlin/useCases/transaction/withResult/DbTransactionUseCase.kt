@@ -19,7 +19,7 @@ abstract class DbTransactionUseCase<QueryArgument, Row : Any, QueryTransacter : 
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    override suspend fun execute(input: QueryArgument): Row {
+    override suspend fun run(input: QueryArgument): Row {
         return withContext(coroutineContext) {
             dbMutex.withLock {
                 transacter.transactionWithResult {
